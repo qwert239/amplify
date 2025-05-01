@@ -1,4 +1,6 @@
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,19 +30,24 @@ public class MusicPlayer {
     }
 
     public void add(String name) {
-        String url = parse_name(name);
+        String url = parse_name(name); // Could be given a name or url
+
         // Get music from youtube_dl
+        String downloaded_name = null;
         try {
-            download_music(url);
+            downloaded_name = download_music(url); // If null, an exception is thrown
         } catch (Exception e){
             throw new RuntimeException(e);
         }
+
         // Create a music object to store info
-        Music obj = new Music();
+        String[] info = downloaded_name.split("-");
+        Music obj = new Music(info[0], info[1]); // Store the author and name of song
+
         // Add to queue
     }
 
-    private void download_music(String url) throws IOException, InterruptedException {
+    private String download_music(String url) throws IOException, InterruptedException {
         String download_path = "/Amplify_MusicFiles/";
         ProcessBuilder pb = new ProcessBuilder(
                 "yt-dlp",
@@ -49,8 +56,24 @@ public class MusicPlayer {
                 "-o", download_path + "%(title)s.%(ext)s",
                 url
         );
-        pb.inheritIO(); // TODO temp, remove when finished
-        pb.start().waitFor();
+        Process process = pb.start();
+        process.waitFor();
+
+        // Read input stream from yt_dlp
+        BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+        String line;
+        String name = null;
+        while ((line = reader.readLine()) != null){
+            String[] split = line.split(" ");
+            if (split[0].equals("[download]")){
+                String[] new_split = line.split("\\\\");
+                name = new_split[2].split(" has already been downloaded")[0];
+                break;
+            }
+        }
+        if (name == null) throw new NullPointerException("name is null");
+
+        return name;
     }
 
     private String parse_name(String name){
