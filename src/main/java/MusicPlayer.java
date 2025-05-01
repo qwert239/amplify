@@ -19,6 +19,10 @@ public class MusicPlayer {
 
     }
 
+    public void loop(boolean state){
+        this.looping = state;
+    }
+
     public void remove(String music_name) {
         // Look for the music in queue and remove it
     }
@@ -32,6 +36,7 @@ public class MusicPlayer {
             throw new RuntimeException(e);
         }
         // Create a music object to store info
+        Music obj = new Music();
         // Add to queue
     }
 
