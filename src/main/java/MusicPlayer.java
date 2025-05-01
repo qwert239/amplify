@@ -1,22 +1,46 @@
+import javafx.application.Platform;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 
 public class MusicPlayer {
-    private List<Music> queue;
+    private Queue<Music> queue;
     private boolean looping;
     public MusicPlayer() {
         // Initialize an empty music player
-        this.queue = new ArrayList<>();
+        this.queue = new LinkedList<Music>();
         this.looping = false;
     }
 
     public void play() {
-        // Start playing the song
-        // Once the song is done, play the next song in queue
-        // If looping, enqueue the finished song again
+        try {
+            // Start playing the song
+            Platform.startup(()->{
+                if (queue.peek() != null) {
+                    Media media = new Media(queue.peek().get_music_path().toURI().toString());
+                    MediaPlayer mediaPlayer = new MediaPlayer(media);
+                    mediaPlayer.setVolume(0.5);
+                    mediaPlayer.play();
+                    mediaPlayer.setOnEndOfMedia(this::next);
+                }
+            });
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+            System.exit(-1);
+        }
+    }
+
+    public void next(){
+        if (this.looping) {
+
+        }
     }
 
     public void pause() {
@@ -45,9 +69,10 @@ public class MusicPlayer {
 
         // Create a music object to store info
         String[] info = downloaded_name.split("-");
-        Music obj = new Music(info[0], info[1]); // Store the author and name of song
+        Music obj = new Music(info[1], info[0]); // Store the author and name of song
 
         // Add to queue
+        this.queue.add(obj);
     }
 
     private String download_music(String url) throws IOException, InterruptedException {
