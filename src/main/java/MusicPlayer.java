@@ -14,11 +14,13 @@ public class MusicPlayer {
     }
 
     public void play() {
-
+        // Start playing the song
+        // Once the song is done, play the next song in queue
+        // If looping, enqueue the finished song again
     }
 
     public void pause() {
-
+        // Pause the song
     }
 
     public void loop(boolean state){
@@ -27,6 +29,7 @@ public class MusicPlayer {
 
     public void remove(String music_name) {
         // Look for the music in queue and remove it
+        // TODO: Probably add a remove button in GUI
     }
 
     public void add(String name) {
