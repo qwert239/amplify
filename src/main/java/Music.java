@@ -1,5 +1,3 @@
-import java.io.File;
-
 public class Music {
     // Stores information for music
     public String name;
