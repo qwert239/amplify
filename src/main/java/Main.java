@@ -1,3 +1,6 @@
+import javafx.animation.PauseTransition;
+import javafx.util.Duration;
+
 import java.io.IOException;
 
 public class Main {
@@ -7,5 +10,6 @@ public class Main {
         MusicPlayer musicPlayer = new MusicPlayer();
         musicPlayer.add("https://www.youtube.com/watch?v=dQw4w9WgXcQ");
         musicPlayer.play();
+
     }
 }

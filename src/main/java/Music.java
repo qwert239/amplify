@@ -1,9 +1,5 @@
 import java.io.File;
 
-import javafx.application.Platform;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
-
 public class Music {
     // Stores information for music
     public String name;
