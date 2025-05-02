@@ -39,6 +39,11 @@
             <version>17.0.8</version>
             <classifier>win</classifier>
         </dependency>
+        <dependency>
+            <groupId>uk.co.caprica</groupId>
+            <artifactId>vlcj</artifactId>
+            <version>4.7.1</version>
+        </dependency>
     </dependencies>
 
 </project>

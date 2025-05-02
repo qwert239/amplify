@@ -4,24 +4,16 @@ public class Music {
     // Stores information for music
     public String name;
     public String artist;
-    private File music_path;
+    public String stream_url;
 
     public Music() {
-        this("None", "None");
+        this("None", "None", "None");
     }
 
-    public Music(String name, String artist) {
+    public Music(String name, String artist, String stream_url) {
         // Overloaded constructor
         this.name = name;
         this.artist = artist;
-        this.music_path = this.get_music_path();
-    }
-
-    public File get_music_path() {
-        if (music_path == null) {
-            return new File("/Amplify_MusicFiles/" + artist + "-" + name);
-        } else {
-            return music_path;
-        }
+        this.stream_url = stream_url;
     }
 }
