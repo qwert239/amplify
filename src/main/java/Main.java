@@ -14,10 +14,15 @@ public class Main {
     }
 
     private static void check_yt_dlp(){
+        // Checks whether yt_dlp is on the system and sends a warning if not
         try {
+            // Run yt-dlp on CLI and check whether a valid version is returned
+
+            // Start a process builder for the command yt-dlp --version
             ProcessBuilder pb = new ProcessBuilder("yt-dlp", "--version");
             Process process = pb.start();
 
+            // Read the input from process builder
             BufferedReader reader = new BufferedReader(
                     new InputStreamReader(process.getInputStream()));
             String line;
@@ -27,6 +32,7 @@ public class Main {
                 found = true;
             }
 
+            // Checks for the version info
             int exitCode = process.waitFor();
             if (exitCode == 0 && found) {
                 System.out.println("yt-dlp is installed.");
