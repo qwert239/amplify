@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.*;
 
+/* This is the main class for playing music, most of the code will be in here*/
+
 public class MusicPlayer {
     private LinkedList<Music> queue;
     MediaPlayer mediaPlayer;
@@ -23,6 +25,24 @@ public class MusicPlayer {
         // Create a new media player
         MediaPlayerFactory factory = new MediaPlayerFactory("--network-caching=5000");
         this.mediaPlayer = factory.mediaPlayers().newMediaPlayer();
+    }
+
+    public String[][] search(String query) {
+        // Create a new array of music to return
+
+        // Search and get music
+        String new_query = parse_name(query, 10);
+        String[][] results;
+        try {
+            results = download_music(new_query, 10, true);
+        } catch (IOException | InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+
+        // Returns an array of music results
+        // Ex: {{title, artist, youtube url}, {...}, {...}}
+        //
+        return results;
     }
 
     public void play() {
@@ -131,13 +151,14 @@ public class MusicPlayer {
     }
 
     public void add(String name) {
-        /* Adds a new song to the playlist */
-        String url = parse_name(name); // Could be given a name or url
+        /* Adds a new song to the playlist, name can be Youtube url*/
+
+        String url = parse_name(name, 1); // Could be given a name or url
 
         // Get music from youtube_dl
         String[] info = null;
         try {
-            info = download_music(url); // If null, an exception is thrown
+            info = download_music(url)[0]; // If null, an exception is thrown
         } catch (Exception e){
             throw new RuntimeException(e);
         }
@@ -155,36 +176,49 @@ public class MusicPlayer {
         return this.queue.isEmpty();
     }
 
-    private String[] download_music(String url) throws IOException, InterruptedException {
+    private String[][] download_music(String url) throws IOException, InterruptedException {
+        // Overloaded method
+        return download_music(url, 1, false);
+    }
+
+
+    private String[][] download_music(String url, int search_num, boolean skip_download) throws IOException, InterruptedException {
         // Downloads music through yt-dlp with process builder
-
-
+        System.out.println("Downloading...\n");
         ProcessBuilder pb = new ProcessBuilder(
                 "yt-dlp",
                 "-f",
                 "m4a",
                 "--print",
                 "%(title)s\n%(uploader)s\n%(url)s",
-                url
+                url,
+                skip_download ? "--flat-playlist" : ""
         );
         Process process = pb.start();
-        process.waitFor();
 
-        return getResults(process);
+        process.waitFor();
+        System.out.println("Done fetching information");
+        return getResults(process, search_num);
     }
 
-    private static String[] getResults(Process process) throws IOException {
-        String[] results = new String[3];
+    private static String[][] getResults(Process process, int search_num) throws IOException {
+        String[][] all_results = new String[search_num][];
+
         // Read input stream from yt_dlp
         BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-        for (int i = 0; i < 3; i++) {
-            results[i] = reader.readLine();
+        for (int j = 0; j < search_num; j++) {
+            String[] results = new String[3];
+            // Read every 3 lines
+            for (int i = 0; i < 3; i++) {
+                results[i] = reader.readLine();
+            }
+            all_results[j] = results;
         }
+        return all_results;
 
-        return results;
     }
 
-    private String parse_name(String name){
+    private String parse_name(String name, int top_n){
         String url = name;
         String[] split_string = url.split("/"); // Split string for searching
 
@@ -196,7 +230,7 @@ public class MusicPlayer {
                 break;
             }
         }
-        if (!is_link) url = "ytsearch:" + name;
+        if (!is_link) url = "ytsearch" + top_n + ":" + name;
         return url;
     }
 }
