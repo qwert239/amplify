@@ -20,13 +20,13 @@ Planned:
 Bugs:
   - Song cuts out in the beginning
 
-External Downloads needed:
-  JavaFX: https://gluonhq.com/products/javafx/
-    17.0.8 used for developing
-    
-  yt-dlp: Install via python's pip   "pip install yt-dlp"
-       or through Window's winget "winget install yt-dlp"
-    Latest version, 2025.04.30
-    
-  VLC media player: https://www.videolan.org/vlc/index.html
-    Latest version, 3.0.21
+External Downloads needed:\n
+  JavaFX: https://gluonhq.com/products/javafx/\n
+    17.0.8 used for developing\n
+    \n
+  yt-dlp: Install via python's pip   "pip install yt-dlp"\n
+       or through Window's winget "winget install yt-dlp"\n
+    Latest version, 2025.04.30\n
+    \n
+  VLC media player: https://www.videolan.org/vlc/index.html\n
+    Latest version, 3.0.21\n
