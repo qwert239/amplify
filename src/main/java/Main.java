@@ -8,6 +8,8 @@ public class Main {
         check_yt_dlp();
         check_vlcj();
         MusicPlayer musicPlayer = new MusicPlayer();
+        musicPlayer.add("roundabout");
+        musicPlayer.play();
     }
 
     private static void check_yt_dlp(){

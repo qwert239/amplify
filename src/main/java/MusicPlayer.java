@@ -59,7 +59,7 @@ public class MusicPlayer {
                     mediaPlayer.events().addMediaPlayerEventListener(new MediaPlayerEventAdapter() {
                         @Override
                         public void buffering(MediaPlayer mediaPlayer, float newCache) {
-                            if (newCache >= 80) { // Play only when buffer reaches 80%
+                            if (newCache >= 90) { // Play only when buffer reaches 80%
                                 mediaPlayer.audio().setMute(false);
                             }
                         }
