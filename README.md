@@ -21,6 +21,7 @@ Planned:
     
 Bugs:
   - Song cuts out in the beginning
+  - Very long songs don't get played
 
 External Downloads needed:
 
