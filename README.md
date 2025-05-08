@@ -1,5 +1,6 @@
 Title: Amplify
 Members: Issac Chu, ,
+
 Project Description: 
 
 Amplify aims to provide an easy to use music player software. The main focus of this app is to let users search for their favorite music and play it right on their computers or laptops.
