@@ -33,7 +33,7 @@
 
 ### 🛠️ Planned Features
 
-- 🖼️ Graphical User Interface (GUI)
+- 🖼️ Graphical User Interface (GUI) (Figma [link ](https://www.figma.com/proto/JRO1m2pMSIh4aUKhJl3IKm/Amplify---Music-Playlist?node-id=2015-13&p=f&t=K8C9NSSNo6rv7QaK-0&scaling=scale-down&content-scaling=fixed&page-id=0%3A1&starting-point-node-id=2026%3A112&show-proto-sidebar=1))
 - 🎵 Playlist creation and management
 - 👤 User profile support
 
