@@ -3,6 +3,7 @@
 ## 👥 Members
 - Issac Chu
 - Alana Dubie
+- James Choi
 
 ---
 
