@@ -3,23 +3,22 @@ import uk.co.caprica.vlcj.factory.MediaPlayerFactory;
 import uk.co.caprica.vlcj.player.base.MediaPlayer;
 import uk.co.caprica.vlcj.player.base.MediaPlayerEventAdapter;
 
-import javax.print.attribute.standard.Media;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.*;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 /* This is the main class for playing music, most of the code will be in here*/
 
 public class MusicPlayer {
-    private LinkedList<Music> queue;
+    private ConcurrentLinkedQueue<Music> queue;
     MediaPlayer mediaPlayer;
     private boolean looping;
     private int volume;
 
     public MusicPlayer() {
         // Initialize an empty music player
-        this.queue = new LinkedList<Music>();
+        this.queue = new ConcurrentLinkedQueue<Music>();
         this.looping = false;
         this.volume = 50;
 
@@ -152,6 +151,10 @@ public class MusicPlayer {
     }
 
     public void play_playlist(String[] playlist){
+        // Empty queue
+        queue = new ConcurrentLinkedQueue<Music>();
+
+        // Start adding songs to queue, and play after first song is loaded
         int i = 0;
         for (String music_name : playlist) {
             add(music_name); // Start loading to queue
@@ -192,7 +195,6 @@ public class MusicPlayer {
         // Overloaded method
         return download_music(url, 1, false);
     }
-
 
     private String[][] download_music(String url, int search_num, boolean skip_download) throws IOException, InterruptedException {
         // Downloads music through yt-dlp with process builder
@@ -246,14 +248,4 @@ public class MusicPlayer {
         return url;
     }
 
-    private class play_thread implements Runnable {
-        Music song;
-        public play_thread(Music song) {
-            this.song = song;
-        }
-        @Override
-        public void run() {
-
-        }
-    }
 }
