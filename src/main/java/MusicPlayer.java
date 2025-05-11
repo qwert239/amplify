@@ -54,7 +54,7 @@ public class MusicPlayer {
             if (current_song != null) {
                 Platform.runLater(() -> {
                     mediaPlayer.audio().setVolume(volume); // Change volume everytime new song is played
-                    mediaPlayer.media().play(current_song.stream_url);
+                    mediaPlayer.media().play(current_song.getStream_url());
                     mediaPlayer.audio().setMute(true);
                     mediaPlayer.events().addMediaPlayerEventListener(new MediaPlayerEventAdapter() {
                         @Override
@@ -127,7 +127,7 @@ public class MusicPlayer {
         /* Look for the music in queue and remove it */
         int i = 0;
         for (Music music : queue) {
-            if (music.name.equals(music_name + " ")) {
+            if (music.getName().equals(music_name + " ")) {
                 queue.remove(i);
             }
             i++;
