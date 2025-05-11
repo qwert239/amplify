@@ -1,5 +1,3 @@
-import javafx.util.Duration;
-
 import javax.swing.*;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -10,6 +8,8 @@ public class Main {
         check_yt_dlp();
         check_vlcj();
         MusicPlayer musicPlayer = new MusicPlayer();
+        musicPlayer.loop(true);
+
         String[] playlist = new String[]{
                 "roundabout",
                 "bury the light",
@@ -29,11 +29,10 @@ public class Main {
         @Override
         public void run() {
             try {
-                for (int i = 0; i < 10; i++) {
-                    Thread.sleep(1000);
-                    System.out.println("Skipping song");
-                    musicPlayer.next();
-                }
+                Thread.sleep(1000);
+                System.out.println("Muting song");
+                musicPlayer.set_volume(0);
+
             } catch (InterruptedException e) {
                 e.printStackTrace();
             } catch (Exception e) {

@@ -25,7 +25,7 @@ public class MusicPlayer {
         // Create a new media player
         MediaPlayerFactory factory = new MediaPlayerFactory("--network-caching=5000");
         this.mediaPlayer = factory.mediaPlayers().newMediaPlayer();
-        Platform.startup(() -> {});
+        Platform.startup(() -> {}); //TODO replace when GUI implemented
     }
 
     public String[][] search(String query) {
@@ -84,7 +84,6 @@ public class MusicPlayer {
     }
 
     public void next(){
-        // TODO hasn't been tested
         /* Can be used to skip current song playing*/
         // Pause current music first
         if (mediaPlayer.status().isPlaying()) {
@@ -114,7 +113,6 @@ public class MusicPlayer {
     }
 
     public void loop(boolean state){
-        // TODO hasn't been tested
         /* Turns on the loop state for the music player */
         this.looping = state;
     }
@@ -185,10 +183,6 @@ public class MusicPlayer {
 
         // Add to queue
         this.queue.add(obj);
-    }
-
-    public boolean is_empty(){
-        return this.queue.isEmpty();
     }
 
     private String[][] download_music(String url) throws IOException, InterruptedException {
