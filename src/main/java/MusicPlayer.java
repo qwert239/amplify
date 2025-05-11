@@ -12,7 +12,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class MusicPlayer {
     private ConcurrentLinkedQueue<Music> queue;
-    MediaPlayer mediaPlayer;
+    private MediaPlayer mediaPlayer;
     private boolean looping;
     private int volume;
 
@@ -25,7 +25,6 @@ public class MusicPlayer {
         // Create a new media player
         MediaPlayerFactory factory = new MediaPlayerFactory("--network-caching=5000");
         this.mediaPlayer = factory.mediaPlayers().newMediaPlayer();
-        Platform.startup(() -> {}); //TODO replace when GUI implemented
     }
 
     public String[][] search(String query) {
@@ -118,7 +117,6 @@ public class MusicPlayer {
     }
 
     public void set_volume(int volume){
-        // TODO hasn't been tested
         mediaPlayer.audio().setVolume(volume);
         this.volume = volume;
     }

@@ -1,9 +1,17 @@
+import javafx.application.Application;
+import javafx.stage.Stage;
+
 import javax.swing.*;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
-public class Main {
+public class Main extends Application {
     public static void main(String[] args) {
+        launch(args);
+    }
+
+    @Override
+    public void start(Stage stage) throws Exception {
         // Driver code
         check_yt_dlp();
         check_vlcj();
@@ -17,29 +25,6 @@ public class Main {
                 "kahoot theme beginning"
         };
         musicPlayer.play_playlist(playlist);
-        Thread thread = new Thread(new music_thread(musicPlayer));
-        thread.start();
-    }
-
-    static class music_thread implements Runnable {
-        MusicPlayer musicPlayer;
-        public music_thread(MusicPlayer musicPlayer) {
-            this.musicPlayer = musicPlayer;
-        }
-        @Override
-        public void run() {
-            try {
-                Thread.sleep(1000);
-                System.out.println("Muting song");
-                musicPlayer.set_volume(0);
-
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-        }
     }
 
     private static void check_yt_dlp(){
@@ -97,4 +82,6 @@ public class Main {
         );
         System.exit(-1);
     }
+
+
 }
