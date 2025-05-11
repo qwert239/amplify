@@ -3,6 +3,7 @@ import uk.co.caprica.vlcj.factory.MediaPlayerFactory;
 import uk.co.caprica.vlcj.player.base.MediaPlayer;
 import uk.co.caprica.vlcj.player.base.MediaPlayerEventAdapter;
 
+import javax.print.attribute.standard.Media;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -25,6 +26,7 @@ public class MusicPlayer {
         // Create a new media player
         MediaPlayerFactory factory = new MediaPlayerFactory("--network-caching=5000");
         this.mediaPlayer = factory.mediaPlayers().newMediaPlayer();
+        Platform.startup(() -> {});
     }
 
     public String[][] search(String query) {
@@ -49,17 +51,17 @@ public class MusicPlayer {
         /* Starts playing the first song in the playlist*/
         try {
             // Start playing a new song
-            Platform.startup(()->{
-                Music current_song = queue.peek();
-                if (current_song != null) {
-                    mediaPlayer.audio().setVolume(this.volume); // Change volume everytime new song is played
+
+            Music current_song = queue.peek();
+            if (current_song != null) {
+                Platform.runLater(() -> {
+                    mediaPlayer.audio().setVolume(volume); // Change volume everytime new song is played
                     mediaPlayer.media().play(current_song.stream_url);
                     mediaPlayer.audio().setMute(true);
-
                     mediaPlayer.events().addMediaPlayerEventListener(new MediaPlayerEventAdapter() {
                         @Override
                         public void buffering(MediaPlayer mediaPlayer, float newCache) {
-                            if (newCache >= 90) { // Play only when buffer reaches 80%
+                            if (newCache >= 80) { // Play only when buffer reaches 80%
                                 mediaPlayer.audio().setMute(false);
                             }
                         }
@@ -73,11 +75,12 @@ public class MusicPlayer {
                             System.out.println("An error occurred during playback");
                         }
                     });
-                }
-            });
+                });
+
+            }
         } catch (Exception e) {
             // Print out error without exiting if there is an error
-            System.out.println("Error: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -86,19 +89,17 @@ public class MusicPlayer {
         /* Can be used to skip current song playing*/
         // Pause current music first
         if (mediaPlayer.status().isPlaying()) {
-            mediaPlayer.controls().pause();
+            mediaPlayer.controls().stop();
         }
 
         // Remove music
-        Music popped_music = queue.remove(); // Remove song from queue
+        Music popped_music = queue.poll(); // Remove song from queue
 
-        if (this.looping) {
+        if (this.looping && popped_music != null) {
             queue.add(popped_music);
         }
-        if (queue.isEmpty()) {
-            mediaPlayer = null; // If queue is empty after removing song, no song is playing
-        } else {
-            play(); // Start playing again if queue is not empty
+        if (!queue.isEmpty()) {
+            play();
         }
     }
 
@@ -147,6 +148,17 @@ public class MusicPlayer {
             } else {
                 queue.remove(index);
             }
+        }
+    }
+
+    public void play_playlist(String[] playlist){
+        int i = 0;
+        for (String music_name : playlist) {
+            add(music_name); // Start loading to queue
+            if (i == 0){
+                play(); // Start playing
+            }
+            i++;
         }
     }
 
@@ -232,5 +244,16 @@ public class MusicPlayer {
         }
         if (!is_link) url = "ytsearch" + top_n + ":" + name;
         return url;
+    }
+
+    private class play_thread implements Runnable {
+        Music song;
+        public play_thread(Music song) {
+            this.song = song;
+        }
+        @Override
+        public void run() {
+
+        }
     }
 }

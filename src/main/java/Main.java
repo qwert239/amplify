@@ -1,3 +1,5 @@
+import javafx.util.Duration;
+
 import javax.swing.*;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -8,8 +10,37 @@ public class Main {
         check_yt_dlp();
         check_vlcj();
         MusicPlayer musicPlayer = new MusicPlayer();
-        musicPlayer.add("roundabout");
-        musicPlayer.play();
+        String[] playlist = new String[]{
+                "roundabout",
+                "bury the light",
+                "wheels on the bus",
+                "kahoot theme beginning"
+        };
+        musicPlayer.play_playlist(playlist);
+        Thread thread = new Thread(new music_thread(musicPlayer));
+        thread.start();
+    }
+
+    static class music_thread implements Runnable {
+        MusicPlayer musicPlayer;
+        public music_thread(MusicPlayer musicPlayer) {
+            this.musicPlayer = musicPlayer;
+        }
+        @Override
+        public void run() {
+            try {
+                for (int i = 0; i < 10; i++) {
+                    Thread.sleep(1000);
+                    System.out.println("Skipping song");
+                    musicPlayer.next();
+                }
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        }
     }
 
     private static void check_yt_dlp(){
