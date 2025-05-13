@@ -1,4 +1,8 @@
 import javafx.application.Application;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextArea;
+import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
 import javax.swing.*;
@@ -15,16 +19,61 @@ public class Main extends Application {
         // Driver code
         check_yt_dlp();
         check_vlcj();
-        MusicPlayer musicPlayer = new MusicPlayer();
-        musicPlayer.loop(true);
+        
+        init_gui(stage);
+    }
 
-        String[] playlist = new String[]{
-                "roundabout",
-                "bury the light",
-                "wheels on the bus",
-                "kahoot theme beginning"
-        };
-        musicPlayer.play_playlist(playlist);
+    private static void init_gui(Stage stage) {
+        // GUI
+        stage.setTitle("Amplify");
+        GridPane grid = new GridPane();
+
+        // Add Buttons
+        Button add_button = new Button("Add Music");
+        Button search_button = new Button("Search Music");
+        Button play = new Button("Start Playing");
+        Button pause = new Button("Pause Music");
+        Button unpause = new Button("Unpause Music");
+        Button skip = new Button("Skip Music");
+
+        grid.add(add_button, 0, 0);
+        grid.add(search_button, 1, 0);
+        grid.add(play, 2, 0);
+        grid.add(pause, 0, 2);
+        grid.add(unpause, 1, 2);
+        grid.add(skip, 2, 2);
+
+        // Create textarea for input
+        TextArea textArea = new TextArea();
+        textArea.setEditable(true);
+        textArea.setWrapText(true);
+        textArea.setMaxWidth(100);
+        textArea.setMaxHeight(20);
+        grid.add(textArea, 0, 1);
+
+        // Add event listeners
+        MusicPlayer musicPlayer = new MusicPlayer(); // Initialize music player
+        add_button.setOnAction(e -> musicPlayer.add(textArea.getText())); // Add textbox text to queue
+
+        search_button.setOnAction(e -> {                                  // Search for music
+            String[][] results = musicPlayer.search(textArea.getText());
+            for (String[] result : results) {
+                System.out.println(result[0]);
+            }
+        });
+
+        play.setOnAction(e -> musicPlayer.play()); // Start playing music in queue
+
+        pause.setOnAction(e -> musicPlayer.pause_toggle(true)); // Pause music
+
+        unpause.setOnAction(e -> musicPlayer.pause_toggle(false)); // Unpause music
+
+        skip.setOnAction(e -> musicPlayer.next()); // Unpause music
+
+        // Create scene
+        Scene scene = new Scene(grid, 300, 300);
+        stage.setScene(scene);
+        stage.show();
     }
 
     private static void check_yt_dlp(){
